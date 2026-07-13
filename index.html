@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Descubre como obtener tu propia franquicia digital</title>
     <style>
         body {
@@ -54,18 +54,44 @@
             transform: scale(1.03);
         }
 
+        /* Contenedor del video con bloqueo absoluto */
         .video-container {
+            position: relative; /* Necesario para posicionar la capa invisible */
             max-width: 800px;
             width: 90%;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
             overflow: hidden;
             background-color: #000;
-            cursor: default; /* Se cambió a default ya que no es clickeable */
         }
+
+        /* CAPA INVISIBLE ANTITACTIL Y ANTICLIC: Bloquea cualquier interacción en PC y Móviles */
+        .video-shield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: transparent;
+            /* Desactiva menús contextuales en móviles al dejar presionado */
+            -webkit-touch-callout: none; 
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         video {
             width: 100%;
             display: block;
+            pointer-events: none; /* Evita que el propio video responda a clicks de forma directa */
+        }
+        
+        /* Ocultar botones de pantalla completa nativos residuales en navegadores basados en Webkit/Blink */
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
+        }
+        video::-webkit-media-controls {
+            display: none !important;
         }
         
         /* Contenedores base comunes */
@@ -253,18 +279,23 @@
 
     <!-- Capa intermedia obligatoria para interactuar y saltarse el bloqueo de audio del navegador -->
     <div class="intro-overlay" id="introOverlay">
-        <button class="btn-start-presentation" onclick="startPresentation()">▶ "No tengas miedo de renunciar a lo bueno para ir a por lo grandioso."</button>
+        <button class="btn-start-presentation" onclick="startPresentation()">▶ CLIC AQUÍ PARA VER PRESENTACIÓN</button>
     </div>
 
     <h1 class="title-heading">DESCUBRE COMO OBTENER TU PROPIA FRANQUICIA DIGITAL</h1>
 
     <div class="video-container" id="videoWrapper">
-        <video id="myVideo">
+        <!-- El escudo invisible intercepta clicks y gestos táctiles -->
+        <div class="video-shield" id="videoShield"></div>
+        
+        <!-- Atributos forzados para evitar pantalla completa nativa en móviles -->
+        <video id="myVideo" playsinline webkit-playsinline disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback">
             <source id="videoSource" src="https://videotourl.com/videos/1783970564042-05419a06-d848-4a4f-9289-903e80d8bec1.mp4" type="video/mp4">
             Tu navegador no soporta la reproducción de video de HTML5.
         </video>
     </div>
 
+    <!-- El resto de las secciones permanecen exactamente iguales -->
     <div class="card-container" id="step1">
         <p class="card-title">¿Desearía obtener más información y asesoría sobre nuestro modelo de negocios?</p>
         <div class="btn-group-p1">
@@ -438,7 +469,7 @@
 
     <div class="card-container" id="sectionC">
         <div class="section-welcome-text-c">
-            ¡Excelente elección y bienvenido/a! Priorizar tu bienestar y buscar solutions de alta calidad es la mejor decisión. Nuestro catálogo está diseñado para entregarte resultados reales desde el primer día. A continuación, te abrimos las puertas a nuestra tienda digital para que descubras la variedad de opciones disponibles y elijas el producto que se adapte perfectamente a tu necesidad actual. ¡Explóralo aquí mismo!:
+            ¡Excelente elección y bienvenido/a! Priorizar tu bienestar y buscar soluciones de alta calidad es la mejor decisión. Nuestro catálogo está diseñado para entregarte resultados reales desde el primer día. A continuación, te abrimos las puertas a nuestra tienda digital para que descubras la variedad de opciones disponibles y elijas el producto que se adapte perfectamente a tu necesidad actual. ¡Explóralo aquí mismo!:
         </div>
         
         <p class="card-title" style="text-align: left;">1. ¡Excelente elección! Nuestro catálogo está diseñado para darte resultados reales. ¿En qué línea de productos específicos te gustaría enfocarte hoy?</p>
@@ -517,12 +548,44 @@
             });
         }
 
-        // Se eliminó la función de alternar pausa/reproducción al hacer clic en el video.
+        // CONTROL DE JAVASCRIPT BLINDADO CONTRA ADELANTOS / PAUSAS FORZADAS POR EL SISTEMA
+        // Si el navegador intenta pausar el video por cualquier motivo de fondo, JS lo vuelve a reproducir al instante
+        video.addEventListener('pause', function(e) {
+            if (currentVideoIndex === 1 || currentVideoIndex === 2) {
+                // Solo si el contenedor sigue visible, forzar el play inmediato si se genera un evento pause involuntario
+                if (videoWrapper.style.display !== 'none') {
+                    video.play();
+                }
+            }
+        });
+
+        // Anti-adelanto preventivo por código: si el tiempo actual salta más de 1 segundo hacia adelante de su registro, lo regresa
+        let targetTime = 0;
+        video.addEventListener('timeupdate', function() {
+            if (!video.seeking) {
+                if (video.currentTime > targetTime + 1) {
+                    video.currentTime = targetTime;
+                } else {
+                    targetTime = video.currentTime;
+                }
+            }
+        });
+        video.addEventListener('seeking', function() {
+            if (video.currentTime > targetTime) {
+                video.currentTime = targetTime;
+            }
+        });
+
+        // Bloquear clic derecho (evita la opción de inspeccionar, "guardar video como" o "mostrar controles")
+        document.getElementById('videoShield').addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
 
         // Manejo del evento de finalización del video
         video.addEventListener('ended', function() {
             if (currentVideoIndex === 1) {
                 currentVideoIndex = 2;
+                targetTime = 0; // Reiniciar contador anti-adelanto para el video 2
                 video.src = secondVideoUrl;
                 video.load();
                 video.play().catch(error => {
