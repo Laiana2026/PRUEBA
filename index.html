@@ -14,6 +14,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow-x: hidden;
         }
         .title-heading {
             color: #333;
@@ -24,7 +25,7 @@
             letter-spacing: 1px;
         }
         
-        /* Pantalla de inicio para forzar la activación de audio */
+        /* Pantalla de inicio obligatoria para forzar reproducción de audio y video */
         .intro-overlay {
             position: fixed;
             top: 0;
@@ -54,7 +55,7 @@
             transform: scale(1.03);
         }
 
-        /* Contenedor del Canvas con bloqueo absoluto */
+        /* CONTEXTO DE VIDEO BLINDADO */
         .video-container {
             position: relative;
             max-width: 800px;
@@ -63,33 +64,44 @@
             border-radius: 8px;
             overflow: hidden;
             background-color: #000;
-            aspect-ratio: 16/9; /* Mantiene la proporción perfecta del video */
+            aspect-ratio: 16/9;
+            /* Evita que navegadores móviles apliquen gestos propios sobre este recuadro */
+            touch-action: none; 
+            -webkit-user-select: none;
+            user-select: none;
         }
 
-        /* El Canvas reemplaza visualmente al elemento video */
+        /* El Canvas que dibuja de forma plana y destruye la interfaz del reproductor */
         canvas {
             width: 100%;
             height: 100%;
             display: block;
+            pointer-events: none; /* Bloqueo de interacción nativa del objeto */
         }
 
-        /* CAPA INVISIBLE ANTITACTIL Y ANTICLIC: Bloquea cualquier interacción en PC y Móviles */
+        /* RECUADRO TRANSPARENTE ENFRENTE (ESCUDO ABSOLUTO ANTITÁCTIL) */
         .video-shield {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 10;
-            background: transparent;
-            -webkit-touch-callout: none; 
-            -webkit-user-select: none;
-            user-select: none;
+            z-index: 999; /* Por encima de cualquier cosa para devorar los toques */
+            background: rgba(0, 0, 0, 0); /* Totalmente transparente */
+            
+            /* Bloqueos a nivel CSS para sistemas operativos móviles */
+            -webkit-touch-callout: none !important; 
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none !important;
         }
 
-        /* El video real se oculta al 100% para que el sistema del móvil jamás le ponga botones encima */
+        /* El reproductor HTML5 real queda invisible y oculto al sistema del celular */
         video {
             display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
         }
         
         /* Contenedores base comunes */
@@ -282,16 +294,19 @@
     <h1 class="title-heading">DESCUBRE COMO OBTENER TU PROPIA FRANQUICIA DIGITAL</h1>
 
     <div class="video-container" id="videoWrapper">
+        <!-- RECUADRO TRANSPARENTE DELANTERO: Devora y anula cualquier toque en pantalla táctil -->
         <div class="video-shield" id="videoShield"></div>
         
+        <!-- Canvas visible plano -->
         <canvas id="videoCanvas"></canvas>
         
+        <!-- Video destruido a nivel visual y de interfaz nativa -->
         <video id="myVideo" playsinline webkit-playsinline disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback">
             <source id="videoSource" src="https://videotourl.com/videos/1783970564042-05419a06-d848-4a4f-9289-903e80d8bec1.mp4" type="video/mp4">
-            Tu navegador no soporta la reproducción de video de HTML5.
         </video>
     </div>
 
+    <!-- PREGUNTA DE INICIO (Sí / No) -->
     <div class="card-container" id="step1">
         <p class="card-title">¿Desearía obtener más información y asesoría sobre nuestro modelo de negocios?</p>
         <div class="btn-group-p1">
@@ -300,6 +315,7 @@
         </div>
     </div>
 
+    <!-- PREGUNTA DE FILTRADO (A / B / C) -->
     <div class="card-container" id="step2">
         <p class="card-title">Después de ver la presentación, ¿en cuál de las siguientes situaciones te encuentras?</p>
         <div class="btn-group-options">
@@ -309,9 +325,10 @@
         </div>
     </div>
 
+    <!-- ==================== BLOQUES SECCIÓN A ==================== -->
     <div class="card-container" id="sectionA">
         <div class="section-welcome-text-a">
-            ¡Felicidades por tomar la iniciativa! El primer paso para cambiar tu realidad económica es tener la determinación de iniciar. Estás a punto de conocer un modelo de negocio diseñado para quienes buscan resultados reales. Para asegurar que este proyecto se adapte perfectamente a tus metas, por favor responde con total honestidad las siguientes preguntas de perfilamiento:
+            ¡Felicidades por tomar la iniciativa! El primer paso para cambiar tu realidad económica es tener la determination de iniciar. Estás a punto de conocer un modelo de negocio diseñado para quienes buscan resultados reales. Para asegurar que este proyecto se adapte perfectamente a tus metas, por favor responde con total honestidad las siguientes preguntas de perfilamiento:
         </div>
         
         <p class="card-title" style="text-align: left;">1. ¿Cuál es tu principal motivación para buscar más fuentes de ingresos?</p>
@@ -380,6 +397,7 @@
     </div>
 
 
+    <!-- ==================== BLOQUES SECCIÓN B ==================== -->
     <div class="card-container" id="sectionB">
         <div class="section-welcome-text-b">
             ¡Excelente decisión y felicidades por tu iniciativa! Tener dudas es la señal clara de que estás analizando este proyecto con la seriedad que se merece. En los negocios inteligentes, las preguntas correctas traen las mejores respuestas. Las siguientes preguntas están diseñadas específicamente para identificar tus inquietudes y asegurarnos de aclararlas con total transparencia en nuestro próximo paso:
@@ -463,6 +481,7 @@
     </div>
 
 
+    <!-- ==================== BLOQUES SECCIÓN C ==================== -->
     <div class="card-container" id="sectionC">
         <div class="section-welcome-text-c">
             ¡Excelente elección y bienvenido/a! Priorizar tu bienestar y buscar soluciones de alta calidad es la mejor decisión. Nuestro catálogo está diseñado para entregarte resultados reales desde el primer día. A continuación, te abrimos las puertas a nuestra tienda digital para que descubras la variedad de opciones disponibles y elijas el producto que se adapte perfectamente a tu necesidad actual. ¡Explóralo aquí mismo!:
@@ -479,6 +498,7 @@
     </div>
 
 
+    <!-- ==================== FORMULARIO DE CONTACTO FINAL ==================== -->
     <div class="card-container" id="contactSection">
         <h2 class="card-title" style="margin-bottom: 10px;">📋 INFORMACIÓN PERSONAL PARA CONTACTO INMEDIATO</h2>
         <p style="color: #666; font-size: 0.95rem; margin-bottom: 25px;">Por favor, completa tus datos correctamente para ponernos en contacto y darte prioridad en la asesoría.</p>
@@ -508,6 +528,7 @@
         const canvas = document.getElementById('videoCanvas');
         const ctx = canvas.getContext('2d');
         const videoWrapper = document.getElementById('videoWrapper');
+        const shield = document.getElementById('videoShield');
         const introOverlay = document.getElementById('introOverlay');
         const step1 = document.getElementById('step1');
         const step2 = document.getElementById('step2');
@@ -534,12 +555,10 @@
         let userPath = "";
         let respuestasHistorial = [];
         
-        // Control de secuencia de videos
         let currentVideoIndex = 1; 
         const secondVideoUrl = "https://videotourl.com/videos/1783955701601-73169369-596f-4c0c-b8a6-d380e48d2922.mp4";
         let animationFrameId;
 
-        // Función que clona los fotogramas del video oculto en el canvas visible
         function renderCanvasFrames() {
             if (!video.paused && !video.ended) {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -547,7 +566,6 @@
             animationFrameId = requestAnimationFrame(renderCanvasFrames);
         }
 
-        // Se ejecuta al pulsar el botón inicial, adaptando las resoluciones y activando la reproducción
         function startPresentation() {
             introOverlay.style.display = 'none';
             
@@ -566,7 +584,7 @@
             });
         }
 
-        // CONTROL JS CONTRA PAUSAS FORZADAS POR EL NAVEGADOR O SISTEMA
+        // CONTROL JS ULTRAESTRICTO DE FLUJO DE REPRODUCCIÓN (ANTI-PAUSAS EXTERNAS)
         video.addEventListener('pause', function() {
             if ((currentVideoIndex === 1 || currentVideoIndex === 2) && videoWrapper.style.display !== 'none') {
                 video.play();
@@ -590,7 +608,6 @@
             }
         });
 
-        // Cambiar secuencialmente al video 2, o terminar y mostrar el test
         video.addEventListener('ended', function() {
             if (currentVideoIndex === 1) {
                 currentVideoIndex = 2;
@@ -606,8 +623,27 @@
             }
         });
 
-        // Deshabilitar menús contextuales (clic derecho / pulsación larga)
-        document.getElementById('videoShield').addEventListener('contextmenu', e => e.preventDefault());
+        // ==========================================
+        // BLINDAJE ABSOLUTO DE EVENTOS EN EL ESCUDO
+        // ==========================================
+        const blockEvent = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        };
+
+        // Devora clicks de ratón, menús contextuales y arrastres
+        shield.addEventListener('contextmenu', blockEvent, true);
+        shield.addEventListener('click', blockEvent, true);
+        shield.addEventListener('mousedown', blockEvent, true);
+        shield.addEventListener('mouseup', blockEvent, true);
+        shield.addEventListener('pointerdown', blockEvent, true);
+
+        // Bloquea por completo el entorno táctil móvil (gestos, pulsación larga nativa, pellizcos)
+        shield.addEventListener('touchstart', blockEvent, { passive: false });
+        shield.addEventListener('touchend', blockEvent, { passive: false });
+        shield.addEventListener('touchmove', blockEvent, { passive: false });
+        shield.addEventListener('touchcancel', blockEvent, { passive: false });
 
         function handleFirstAnswer(answer) {
             if (answer === 'Sí') {
@@ -712,7 +748,7 @@
         // ==================== FLUJO SECCIÓN C ====================
         function handleSectionCAnswer1(option) {
             respuestasHistorial.push("Línea elegida: " + option);
-            userPath = option; // Se define dinámicamente con el nombre exacto de la opción
+            userPath = option; 
             sectionC.style.display = 'none';
             contactSection.style.display = 'block';
         }
