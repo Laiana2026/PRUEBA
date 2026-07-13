@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Imparable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            display: flex;
+            flex-direction: column; /* Cambiado a columna para alinear título y video verticalmente */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            user-select: none;
+            color: #fff; /* Asegura que el título sea visible sobre fondo oscuro */
+        }
+
+        /* Estilos para el nuevo título */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px; /* Espacio entre título y video */
+            font-size: 2.5em; /* Tamaño de fuente más grande para el título */
+            text-transform: uppercase; /* Título en mayúsculas (opcional) */
+            letter-spacing: 2px; /* Espaciado entre letras (opcional) */
+        }
+
+        .video-container {
+            position: relative;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #000;
+        }
+        video {
+            width: 100%;
+            display: block;
+            pointer-events: none; /* Desactiva CUALQUIER clic o interacción directa sobre el video */
+        }
+        /* Botón personalizado para activar el sonido */
+        .audio-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+        .audio-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nuevo título añadido justo antes del contenedor del video -->
+    <h1>EMPRENDIENDO CON ALEX CHIMBO</h1>
+
+    <div class="video-container" id="videoWrapper">
+        <!-- Botón de Audio -->
+        <button class="audio-btn" id="audioBtn">🔊 Activar Sonido</button>
+        
+        <!-- Video sin controles, autoplay, muted, playsinline -->
+        <video id="miVideo" autoplay muted playsinline preload="auto">
+            <source src="https://videotourl.com/videos/1783955701601-73169369-596f-4c0c-b8a6-d380e48d2922.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de este video.
+        </video>
+    </div>
+
+    <script>
+        const video = document.getElementById('miVideo');
+        const audioBtn = document.getElementById('audioBtn');
+        const wrapper = document.getElementById('videoWrapper');
+
+        // Control del botón de audio
+        audioBtn.addEventListener('click', (e) => {
+            if (video.muted) {
+                video.muted = false;
+                audioBtn.innerHTML = "🔇 Silenciar";
+            } else {
+                video.muted = true;
+                audioBtn.innerHTML = "🔊 Activar Sonido";
+            }
+        });
+
+        // "Anti-pausa": Si por alguna razón externa el video se pausa, se fuerza su reproducción al instante
+        video.addEventListener('pause', () => {
+            video.play();
+        });
+
+        // Bloquear por completo el menú de clic derecho en todo el contenedor
+        wrapper.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>
