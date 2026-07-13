@@ -3,253 +3,694 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corazón de Fotos con Borde Rosa</title>
+    <title>Descubre como obtener tu propia franquicia digital</title>
     <style>
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 40px 20px;
-            background-color: #ffffff;
+        }
+        .title-heading {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Pantalla de inicio para forzar la activación de audio */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            font-family: system-ui, -apple-system, sans-serif;
+            z-index: 9999;
+        }
+        .btn-start-presentation {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+            transition: all 0.2s ease;
+        }
+        .btn-start-presentation:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
         }
 
-        /* EFECTO MÁGICO DEL BORDE ROSA:
-           drop-shadow aplica una sombra con la forma exacta del conjunto de elementos hijos.
-           Al poner 4 sombras en las 4 direcciones sin difuminado, creamos un borde perfecto de 4px.
-        */
-        .heart-outline-wrapper {
-            filter: 
-                drop-shadow(4px 0px 0px #f4a2b8) 
-                drop-shadow(-4px 0px 0px #f4a2b8) 
-                drop-shadow(0px 4px 0px #f4a2b8) 
-                drop-shadow(0px -4px 0px #f4a2b8)
-                drop-shadow(0px 10px 15px rgba(0,0,0,0.1)); /* Suave sombra base para dar profundidad */
-            padding: 10px;
-        }
-
-        /* Contenedor Grid: Rejilla exacta de 9x9 */
-        .heart-grid {
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            gap: 6px; /* Pequeña separación interna como en la foto original */
-            width: 100%;
-            max-width: 850px;
-            margin: 0 auto;
-        }
-
-        /* Estilo de los bloques contenedores (Enlaces de las fotos) */
-        .heart-grid a {
-            display: block;
-            position: relative;
+        .video-container {
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
             overflow: hidden;
-            border-radius: 4px;
-            text-decoration: none;
-            background-color: #fceef2;
-            transition: transform 0.2s ease, z-index 0s;
-            z-index: 1;
+            background-color: #000;
+            cursor: default; /* Se cambió a default ya que no es clickeable */
         }
-
-        /* Al pasar el cursor, la foto resalta */
-        .heart-grid a:hover {
-            transform: scale(1.12);
-            z-index: 10;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-
-        /* Control de Imágenes y Transición de Rotación */
-        .heart-grid img {
+        video {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
             display: block;
-            transition: opacity 0.4s ease-in-out;
+        }
+        
+        /* Contenedores base comunes */
+        .card-container {
+            display: none;
+            max-width: 580px;
+            width: 90%;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .card-title {
+            color: #222;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .card-note {
+            font-size: 0.95rem;
+            color: #555;
+            background-color: #f8fafc;
+            border-left: 4px solid #007bff;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.4;
+        }
+        
+        /* Cuadros de texto de bienvenida por sección */
+        .section-welcome-text-a {
+            font-size: 1rem;
+            color: #444;
+            background-color: #f0fdf4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .section-welcome-text-b {
+            font-size: 1rem;
+            color: #444;
+            background-color: #f0f9ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .section-welcome-text-c {
+            font-size: 1rem;
+            color: #444;
+            background-color: #faf5ff;
+            border-left: 4px solid #8b5cf6;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.5;
+        }
+        
+        /* Botones de la Pregunta 1 (Sí / No) */
+        .btn-group-p1 {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .survey-btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .btn-yes { background-color: #28a745; color: white; }
+        .btn-yes:hover { background-color: #218838; }
+        .btn-no { background-color: #dc3545; color: white; }
+        .btn-no:hover { background-color: #c82333; }
+
+        /* Botones de opción múltiple */
+        .btn-group-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn-option {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 2px solid #e2e8f0;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-option:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e1;
         }
 
-        .fade-out { opacity: 0; }
+        /* Campos de texto para la opción "Otro" e Información Personal */
+        .input-other-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+        .input-text-field {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .input-text-field:focus {
+            border-color: #cbd5e1;
+            background-color: #fcfcfd;
+        }
+        
+        .btn-submit-form {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 10px;
+        }
+        .btn-submit-form:hover {
+            background-color: #218838;
+        }
+        .btn-submit-form:disabled {
+            background-color: #a3e635;
+            cursor: not-allowed;
+        }
 
-        /* Proporciones de celdas */
-        .c-square { aspect-ratio: 1.1 / 1; } /* Ligeramente rectangular para imitar las fotos del collage original */
-        .c-large { grid-column: span 2; grid-row: span 2; aspect-ratio: 1.1 / 1; }
-        .c-wide { grid-column: span 2; aspect-ratio: 2.2 / 1; }
+        .btn-submit-other {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .btn-submit-other:hover {
+            background-color: #0056b3;
+        }
 
-        /* ==============================================================
-           DISTRIBUCIÓN GEOMÉTRICA DEL CORAZÓN (9 COLUMNAS x 9 FILAS)
-           ============================================================== */
-
-        /* FILA 1 */
-        .pos-1 { grid-row: 1; grid-column: 2; }
-        .pos-2 { grid-row: 1; grid-column: 3; }
-        .pos-3 { grid-row: 1; grid-column: 4; }
-        .pos-4 { grid-row: 1; grid-column: 6; }
-        .pos-5 { grid-row: 1; grid-column: 7; }
-        .pos-6 { grid-row: 1; grid-column: 8; }
-
-        /* FILA 2 */
-        .pos-7 { grid-row: 2; grid-column: 1; }
-        .pos-8 { grid-row: 2; grid-column: 2; } 
-        .pos-9 { grid-row: 2; grid-column: 3 / span 2; grid-row: 2 / span 2; } /* Foto Grande Izquierda */
-        .pos-10 { grid-row: 2; grid-column: 5; }
-        .pos-11 { grid-row: 2; grid-column: 6 / span 2; grid-row: 2 / span 2; } /* Foto Grande Derecha */
-        .pos-12 { grid-row: 2; grid-column: 8; }
-        .pos-13 { grid-row: 2; grid-column: 9; }
-
-        /* FILA 3 */
-        .pos-14 { grid-row: 3; grid-column: 1; }
-        .pos-15 { grid-row: 3; grid-column: 2; }
-        .pos-16 { grid-row: 3; grid-column: 5; }
-        .pos-17 { grid-row: 3; grid-column: 8; }
-        .pos-18 { grid-row: 3; grid-column: 9; }
-
-        /* FILA 4 (Centro Ancho) */
-        .pos-19 { grid-row: 4; grid-column: 1; }
-        .pos-20 { grid-row: 4; grid-column: 2 / span 2; }
-        .pos-21 { grid-row: 4; grid-column: 4 / span 2; grid-row: 4 / span 2; } /* Foto Grande Central */
-        .pos-22 { grid-row: 4; grid-column: 6 / span 2; }
-        .pos-23 { grid-row: 4; grid-column: 8; }
-        .pos-24 { grid-row: 4; grid-column: 9; }
-
-        /* FILA 5 */
-        .pos-25 { grid-row: 5; grid-column: 1; }
-        .pos-26 { grid-row: 5; grid-column: 2; }
-        .pos-27 { grid-row: 5; grid-column: 3; }
-        .pos-28 { grid-row: 5; grid-column: 6; }
-        .pos-29 { grid-row: 5; grid-column: 7; }
-        .pos-30 { grid-row: 5; grid-column: 8; }
-        .pos-31 { grid-row: 5; grid-column: 9; }
-
-        /* FILA 6 */
-        .pos-32 { grid-row: 6; grid-column: 2; }
-        .pos-33 { grid-row: 6; grid-column: 3; }
-        .pos-34 { grid-row: 6; grid-column: 4; }
-        .pos-35 { grid-row: 6; grid-column: 5; }
-        .pos-36 { grid-row: 6; grid-column: 6; }
-        .pos-37 { grid-row: 6; grid-column: 7; }
-        .pos-38 { grid-row: 6; grid-column: 8; }
-
-        /* FILA 7 */
-        .pos-39 { grid-row: 7; grid-column: 3; }
-        .pos-40 { grid-row: 7; grid-column: 4; }
-        .pos-41 { grid-row: 7; grid-column: 5; }
-        .pos-42 { grid-row: 7; grid-column: 6; }
-        .pos-43 { grid-row: 7; grid-column: 7; }
-
-        /* FILA 8 */
-        .pos-44 { grid-row: 8; grid-column: 4; }
-        .pos-45 { grid-row: 8; grid-column: 5; }
-        .pos-46 { grid-row: 8; grid-column: 6; }
-
-        /* FILA 9 (Punta Inferior) */
-        .pos-47 { grid-row: 9; grid-column: 5; }
-
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="heart-outline-wrapper">
-        <div class="heart-grid">
-            <a href="enlace1.html" class="pos-1 c-square" id="cell-1"><img src="https://picsum.photos/300/300?random=1" alt="Foto"></a>
-            <a href="enlace2.html" class="pos-2 c-square" id="cell-2"><img src="https://picsum.photos/300/300?random=2" alt="Foto"></a>
-            <a href="enlace3.html" class="pos-3 c-square" id="cell-3"><img src="https://picsum.photos/300/300?random=3" alt="Foto"></a>
-            <a href="enlace4.html" class="pos-4 c-square" id="cell-4"><img src="https://picsum.photos/300/300?random=4" alt="Foto"></a>
-            <a href="enlace5.html" class="pos-5 c-square" id="cell-5"><img src="https://picsum.photos/300/300?random=5" alt="Foto"></a>
-            <a href="enlace6.html" class="pos-6 c-square" id="cell-6"><img src="https://picsum.photos/300/300?random=6" alt="Foto"></a>
+    <!-- Capa intermedia obligatoria para interactuar y saltarse el bloqueo de audio del navegador -->
+    <div class="intro-overlay" id="introOverlay">
+        <button class="btn-start-presentation" onclick="startPresentation()">▶ "No tengas miedo de renunciar a lo bueno para ir a por lo grandioso."</button>
+    </div>
 
-            <a href="enlace7.html" class="pos-7 c-square" id="cell-7"><img src="https://picsum.photos/300/300?random=7" alt="Foto"></a>
-            <a href="enlace8.html" class="pos-8 c-square" id="cell-8"><img src="https://picsum.photos/300/300?random=8" alt="Foto"></a>
-            <a href="enlace9.html" class="pos-9 c-large" id="cell-9"><img src="https://picsum.photos/600/600?random=9" alt="Foto Grande"></a>
-            <a href="enlace10.html" class="pos-10 c-square" id="cell-10"><img src="https://picsum.photos/300/300?random=10" alt="Foto"></a>
-            <a href="enlace11.html" class="pos-11 c-large" id="cell-11"><img src="https://picsum.photos/600/600?random=11" alt="Foto Grande"></a>
-            <a href="enlace12.html" class="pos-12 c-square" id="cell-12"><img src="https://picsum.photos/300/300?random=12" alt="Foto"></a>
-            <a href="enlace13.html" class="pos-13 c-square" id="cell-13"><img src="https://picsum.photos/300/300?random=13" alt="Foto"></a>
+    <h1 class="title-heading">DESCUBRE COMO OBTENER TU PROPIA FRANQUICIA DIGITAL</h1>
 
-            <a href="enlace14.html" class="pos-14 c-square" id="cell-14"><img src="https://picsum.photos/300/300?random=14" alt="Foto"></a>
-            <a href="enlace15.html" class="pos-15 c-square" id="cell-15"><img src="https://picsum.photos/300/300?random=15" alt="Foto"></a>
-            <a href="enlace16.html" class="pos-16 c-square" id="cell-16"><img src="https://picsum.photos/300/300?random=16" alt="Foto"></a>
-            <a href="enlace17.html" class="pos-17 c-square" id="cell-17"><img src="https://picsum.photos/300/300?random=17" alt="Foto"></a>
-            <a href="enlace18.html" class="pos-18 c-square" id="cell-18"><img src="https://picsum.photos/300/300?random=18" alt="Foto"></a>
+    <div class="video-container" id="videoWrapper">
+        <video id="myVideo">
+            <source id="videoSource" src="https://videotourl.com/videos/1783970564042-05419a06-d848-4a4f-9289-903e80d8bec1.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de video de HTML5.
+        </video>
+    </div>
 
-            <a href="enlace19.html" class="pos-19 c-square" id="cell-19"><img src="https://picsum.photos/300/300?random=19" alt="Foto"></a>
-            <a href="enlace20.html" class="pos-20 c-wide" id="cell-20"><img src="https://picsum.photos/600/300?random=20" alt="Foto Horizontal"></a>
-            <a href="enlace21.html" class="pos-21 c-large" id="cell-21"><img src="https://picsum.photos/600/600?random=21" alt="Centro"></a>
-            <a href="enlace22.html" class="pos-22 c-wide" id="cell-22"><img src="https://picsum.photos/600/300?random=22" alt="Foto Horizontal"></a>
-            <a href="enlace23.html" class="pos-23 c-square" id="cell-23"><img src="https://picsum.photos/300/300?random=23" alt="Foto"></a>
-            <a href="enlace24.html" class="pos-24 c-square" id="cell-24"><img src="https://picsum.photos/300/300?random=24" alt="Foto"></a>
-
-            <a href="enlace25.html" class="pos-25 c-square" id="cell-25"><img src="https://picsum.photos/300/300?random=25" alt="Foto"></a>
-            <a href="enlace26.html" class="pos-26 c-square" id="cell-26"><img src="https://picsum.photos/300/300?random=26" alt="Foto"></a>
-            <a href="enlace27.html" class="pos-27 c-square" id="cell-27"><img src="https://picsum.photos/300/300?random=27" alt="Foto"></a>
-            <a href="enlace28.html" class="pos-28 c-square" id="cell-28"><img src="https://picsum.photos/300/300?random=28" alt="Foto"></a>
-            <a href="enlace29.html" class="pos-29 c-square" id="cell-29"><img src="https://picsum.photos/300/300?random=29" alt="Foto"></a>
-            <a href="enlace30.html" class="pos-30 c-square" id="cell-30"><img src="https://picsum.photos/300/300?random=30" alt="Foto"></a>
-            <a href="enlace31.html" class="pos-31 c-square" id="cell-31"><img src="https://picsum.photos/300/300?random=31" alt="Foto"></a>
-
-            <a href="enlace32.html" class="pos-32 c-square" id="cell-32"><img src="https://picsum.photos/300/300?random=32" alt="Foto"></a>
-            <a href="enlace33.html" class="pos-33 c-square" id="cell-33"><img src="https://picsum.photos/300/300?random=33" alt="Foto"></a>
-            <a href="enlace34.html" class="pos-34 c-square" id="cell-34"><img src="https://picsum.photos/300/300?random=34" alt="Foto"></a>
-            <a href="enlace35.html" class="pos-35 c-square" id="cell-35"><img src="https://picsum.photos/300/300?random=35" alt="Foto"></a>
-            <a href="enlace36.html" class="pos-36 c-square" id="cell-36"><img src="https://picsum.photos/300/300?random=36" alt="Foto"></a>
-            <a href="enlace37.html" class="pos-37 c-square" id="cell-37"><img src="https://picsum.photos/300/300?random=37" alt="Foto"></a>
-            <a href="enlace38.html" class="pos-38 c-square" id="cell-38"><img src="https://picsum.photos/300/300?random=38" alt="Foto"></a>
-
-            <a href="enlace39.html" class="pos-39 c-square" id="cell-39"><img src="https://picsum.photos/300/300?random=39" alt="Foto"></a>
-            <a href="enlace40.html" class="pos-40 c-square" id="cell-40"><img src="https://picsum.photos/300/300?random=40" alt="Foto"></a>
-            <a href="enlace41.html" class="pos-41 c-square" id="cell-41"><img src="https://picsum.photos/300/300?random=41" alt="Foto"></a>
-            <a href="enlace42.html" class="pos-42 c-square" id="cell-42"><img src="https://picsum.photos/300/300?random=42" alt="Foto"></a>
-            <a href="enlace43.html" class="pos-43 c-square" id="cell-43"><img src="https://picsum.photos/300/300?random=43" alt="Foto"></a>
-
-            <a href="enlace44.html" class="pos-44 c-square" id="cell-44"><img src="https://picsum.photos/300/300?random=44" alt="Foto"></a>
-            <a href="enlace45.html" class="pos-45 c-square" id="cell-45"><img src="https://picsum.photos/300/300?random=45" alt="Foto"></a>
-            <a href="enlace46.html" class="pos-46 c-square" id="cell-46"><img src="https://picsum.photos/300/300?random=46" alt="Foto"></a>
-
-            <a href="enlace47.html" class="pos-47 c-square" id="cell-47"><img src="https://picsum.photos/300/300?random=47" alt="Foto"></a>
+    <div class="card-container" id="step1">
+        <p class="card-title">¿Desearía obtener más información y asesoría sobre nuestro modelo de negocios?</p>
+        <div class="btn-group-p1">
+            <button class="survey-btn btn-yes" onclick="handleFirstAnswer('Sí')">Sí, me interesa</button>
+            <button class="survey-btn btn-no" onclick="handleFirstAnswer('No')">No por el momento</button>
         </div>
     </div>
 
-    <script>
-        // ALBUM DE IMÁGENES ROTATIVAS:
-        // Agrega aquí los arreglos con las URLs de tus fotos reales para cada casilla (del 1 al 47)
-        const carruselFotos = {
-            1: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=81"],
-            2: ["https://picsum.photos/300/300?random=2", "https://picsum.photos/300/300?random=82"],
-            9: ["https://picsum.photos/600/600?random=9", "https://picsum.photos/600/600?random=83"],  /* Foto grande lóbulo izq */
-            11: ["https://picsum.photos/600/600?random=11", "https://picsum.photos/600/600?random=84"], /* Foto grande lóbulo der */
-            21: ["https://picsum.photos/600/600?random=21", "https://picsum.photos/600/600?random=85"], /* Centro del corazón */
-            47: ["https://picsum.photos/300/300?random=47", "https://picsum.photos/300/300?random=86"]  /* Punta de abajo */
-        };
+    <div class="card-container" id="step2">
+        <p class="card-title">Después de ver la presentación, ¿en cuál de las siguientes situaciones te encuentras?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="navigateToSection('sectionA')"><b>A)</b> Listo para empezar.</button>
+            <button class="btn-option" onclick="navigateToSection('sectionB')"><b>B)</b> Listo para empezar, pero tengo dudas o preguntas.</button>
+            <button class="btn-option" onclick="navigateToSection('sectionC')"><b>C)</b> Solo quiero adquirir productos.</button>
+        </div>
+    </div>
 
-        // Inicializador de índices
-        let fotoActualIndex = {};
-        for (let i = 1; i <= 47; i++) {
-            fotoActualIndex[i] = 0;
+    <div class="card-container" id="sectionA">
+        <div class="section-welcome-text-a">
+            ¡Felicidades por tomar la iniciativa! El primer paso para cambiar tu realidad económica es tener la determinación de iniciar. Estás a punto de conocer un modelo de negocio diseñado para quienes buscan resultados reales. Para asegurar que este proyecto se adapte perfectamente a tus metas, por favor responde con total honestidad las siguientes preguntas de perfilamiento:
+        </div>
+        
+        <p class="card-title" style="text-align: left;">1. ¿Cuál es tu principal motivación para buscar más fuentes de ingresos?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionAAnswer1('Libertad Financiera y Progreso Económico')">💰 Libertad Financiera y Progreso Económico</button>
+            <button class="btn-option" onclick="handleSectionAAnswer1('Ayudar a la Familia')">👨‍👩‍👧‍👦 Ayudar a la Familia</button>
+            <button class="btn-option" onclick="handleSectionAAnswer1('Independencia, Flexibilidad y Autonomía')">⏰ Independencia, Flexibilidad y Autonomía</button>
+            <button class="btn-option" onclick="handleSectionAAnswer1('Desarrollo Personal y Profesional')">📈 Desarrollo Personal y Profesional</button>
+            <button class="btn-option" onclick="handleSectionAAnswer1('Estilo de Vida (Viajes, Cumplir Sueños)')">🌍 Estilo de Vida (Viajes, Cumplir Sueños)</button>
+            <button class="btn-option" onclick="handleSectionAAnswer1('Interés por las Ventas o el Mundo Digital')">💻 Interés por las Ventas o el Mundo Digital</button>
+            
+            <div class="input-other-container">
+                <input type="text" id="inputOtherA1" class="input-text-field" placeholder="✏️ Otro (Especificar motivo)...">
+                <button class="btn-submit-other" onclick="submitOtherAnswerA1()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionA_q2">
+        <p class="card-title" style="text-align: left;">2. ¿Qué te impide avanzar hacia tus metas?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionAAnswer2('No tengo tiempo para nada y vivo desorganizado/a')">⏰ No tengo tiempo para nada y vivo desorganizado/a</button>
+            <button class="btn-option" onclick="handleSectionAAnswer2('Me paralizo y postergo todo')">😳 Me paralizo y postergo todo</button>
+            <button class="btn-option" onclick="handleSectionAAnswer2('No sé cómo hacerlo')">📚 No sé cómo hacerlo</button>
+            <button class="btn-option" onclick="handleSectionAAnswer2('No tengo la plata')">💸 No tengo la plata</button>
+            <button class="btn-option" onclick="handleSectionAAnswer2('Estoy perdido/a, no sé por dónde empezar')">🧭 Estoy perdido/a, no sé por dónde empezar</button>
+            
+            <div class="input-other-container">
+                <input type="text" id="inputOtherA2" class="input-text-field" placeholder="✏️ Otro (Especificar impedimento)...">
+                <button class="btn-submit-other" onclick="submitOtherAnswerA2()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionA_q3">
+        <p class="card-title" style="text-align: left;">3. ¿Aproximadamente, cuánto ganas al mes en dólares (USD)?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionAAnswer3('Menos de $100 USD al mes')">💵 Menos de $100 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionAAnswer3('Entre $100 a $500 USD al mes')">💵 Entre $100 a $500 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionAAnswer3('Entre $500 a $1,000 USD al mes')">💵 Entre $500 a $1,000 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionAAnswer3('Entre $1,000 a $2,000 USD al mes')">💵 Entre $1,000 a $2,000 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionAAnswer3('Más de $2,000 USD al mes')">💵 Más de $2,000 USD al mes</button>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionA_q4">
+        <p class="card-title" style="text-align: left; margin-bottom: 12px;">4. ¿Qué nivel de inversión estarías dispuesto a destinar para activar tu propia franquicia y construir un ingreso mínimo de +$1,000 USD extras al mes?</p>
+        <div class="card-note">
+            <b>Nota:</b> Al iniciar hoy tu Franquicia Digital, aseguras acompañamiento estratégico 1 a 1 directamente conmigo, inventario en productos que duplica el valor de tu inscripción y acceso inmediato a nuestro sistema educativo de negocios valorado en más de +$3,000 USD.
+        </div>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionAAnswer4('Más de $500 USD')">🔻 Más de $500 USD</button>
+            <button class="btn-option" onclick="handleSectionAAnswer4('Entre $500 a más de $1,000 USD')">💵 Entre $500 a más de $1,000 USD</button>
+            <button class="btn-option" onclick="handleSectionAAnswer4('Entre $2,000 a más de $4,000 USD')">🚀 Entre $2,000 a más de $4,000 USD</button>
+            <button class="btn-option" onclick="handleSectionAAnswer4('Más de $5,000 USD')">💎 Más de $5,000 USD</button>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionA_q5">
+        <p class="card-title" style="text-align: left;">5. Sabiendo el valor de nuestra propuesta, ¿podrías gestionar una inversión mínima de $500 USD (más IVA aplicable solo en Ecuador) para arrancar con el desarrollo de tu propia Franquicia Digital?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionAAnswer5('Sí, podría hacerlo de inmediato')">🟢 Sí, podría hacerlo de inmediato</button>
+            <button class="btn-option" onclick="handleSectionAAnswer5('No tengo el dinero completo en este momento, pero lo podría conseguir / financiar')">🟡 No tengo el dinero completo en este momento, pero lo podría conseguir / financiar</button>
+            <button class="btn-option" onclick="handleSectionAAnswer5('No, definitivamente no podría hacerlo')">🔴 No, definitivamente no podría hacerlo</button>
+        </div>
+    </div>
+
+
+    <div class="card-container" id="sectionB">
+        <div class="section-welcome-text-b">
+            ¡Excelente decisión y felicidades por tu iniciativa! Tener dudas es la señal clara de que estás analizando este proyecto con la seriedad que se merece. En los negocios inteligentes, las preguntas correctas traen las mejores respuestas. Las siguientes preguntas están diseñadas específicamente para identificar tus inquietudes y asegurarnos de aclararlas con total transparencia en nuestro próximo paso:
+        </div>
+        
+        <p class="card-title" style="text-align: left;">1. Para poder ayudarte mejor en nuestra próxima reunión, ¿cuál es tu principal duda o inquietun en este momento?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionBAnswer1('No estoy seguro de tener el tiempo suficiente para desarrollar el proyecto.')"><b>A)</b> No estoy seguro de tener el tiempo suficiente para desarrollar el proyecto.</button>
+            <button class="btn-option" onclick="handleSectionBAnswer1('Tengo dudas sobre cómo funciona el sistema de comisiones y ganancias.')"><b>B)</b> Tengo dudas sobre cómo funciona el sistema de comisiones y ganancias.</button>
+            <button class="btn-option" onclick="handleSectionBAnswer1('Me gusta todo, pero me frena un poco el tema de la inversión inicial.')"><b>C)</b> Me gusta todo, pero me frena un poco el tema de la inversión inicial.</button>
+            <button class="btn-option" onclick="handleSectionBAnswer1('No tengo experiencia en ventas o negocios digitales y temo no saber cómo empezar.')"><b>D)</b> No tengo experiencia en ventas o negocios digitales y temo no saber cómo empezar.</button>
+            
+            <div class="input-other-container">
+                <input type="text" id="inputOtherB1" class="input-text-field" placeholder="✏️ E) Otro...">
+                <button class="btn-submit-other" onclick="submitOtherAnswerB1()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionB_q2_new">
+        <p class="card-title" style="text-align: left;">2. ¿Cuál es tu principal motivación para buscar más fuentes de ingresos?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionBNewQuestion('Libertad Financiera y Progreso Económico')">💰 Libertad Financiera y Progreso Económico</button>
+            <button class="btn-option" onclick="handleSectionBNewQuestion('Ayudar a la Familia')">👨‍👩‍👧‍👦 Ayudar a la Familia</button>
+            <button class="btn-option" onclick="handleSectionBNewQuestion('Independencia, Flexibilidad y Autonomía')">⏰ Independencia, Flexibilidad y Autonomía</button>
+            <button class="btn-option" onclick="handleSectionBNewQuestion('Desarrollo Personal y Profesional')">📈 Desarrollo Personal y Profesional</button>
+            <button class="btn-option" onclick="handleSectionBNewQuestion('Estilo de Vida (Viajes, Cumplir Sueños)')">🌍 Estilo de Vida (Viajes, Cumplir Sueños)</button>
+            <button class="btn-option" onclick="handleSectionBNewQuestion('Interés por las Ventas o el Mundo Digital')">💻 Interés por las Ventas o el Mundo Digital</button>
+            
+            <div class="input-other-container">
+                <input type="text" id="inputOtherB2_New" class="input-text-field" placeholder="✏️ Otro (Especificar)...">
+                <button class="btn-submit-other" onclick="submitOtherAnswerB2New()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionB_q2">
+        <p class="card-title" style="text-align: left;">3. ¿Qué te impide avanzar hacia tus metas?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionBAnswer2('No tengo tiempo para nada y vivo desorganizado/a')">⏰ No tengo tiempo para nada y vivo desorganizado/a</button>
+            <button class="btn-option" onclick="handleSectionBAnswer2('Me paralizo y postergo todo')">😳 Me paralizo y postergo todo</button>
+            <button class="btn-option" onclick="handleSectionBAnswer2('No sé cómo hacerlo')">📚 No sé cómo hacerlo</button>
+            <button class="btn-option" onclick="handleSectionBAnswer2('No tengo la plata')">💸 No tengo la plata</button>
+            <button class="btn-option" onclick="handleSectionBAnswer2('Estoy perdido/a, no sé por dónde empezar')">🧭 Estoy perdido/a, no sé por dónde empezar</button>
+            
+            <div class="input-other-container">
+                <input type="text" id="inputOtherB2" class="input-text-field" placeholder="✏️ Otro...">
+                <button class="btn-submit-other" onclick="submitOtherAnswerB2()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionB_q3">
+        <p class="card-title" style="text-align: left;">4. ¿Aproximadamente, cuánto ganas al mes en dólares (USD)?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionBAnswer3('Menos de $100 USD al mes')">💵 Menos de $100 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionBAnswer3('Entre $100 a $500 USD al mes')">💵 Entre $100 a $500 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionBAnswer3('Entre $500 a $1,000 USD al mes')">💵 Entre $500 a $1,000 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionBAnswer3('Entre $1,000 a $2,000 USD al mes')">💵 Entre $1,000 a $2,000 USD al mes</button>
+            <button class="btn-option" onclick="handleSectionBAnswer3('Más de $2,000 USD al mes')">💵 Más de $2,000 USD al mes</button>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionB_q4">
+        <p class="card-title" style="text-align: left;">5. ¿Qué nivel de inversión estarías dispuesto a destinar para activar tu propia franquicia y construir un ingreso mínimo de +$1,000 USD extras al mes?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionBAnswer4('Más de $500 USD')">🔻 Más de $500 USD</button>
+            <button class="btn-option" onclick="handleSectionBAnswer4('Entre $500 a más de $1,000 USD')">💵 Entre $500 a más de $1,000 USD</button>
+            <button class="btn-option" onclick="handleSectionBAnswer4('Entre $2,000 a más de $4,000 USD')">🚀 Entre $2,000 a más de $4,000 USD</button>
+            <button class="btn-option" onclick="handleSectionBAnswer4('Más de $5,000 USD')">💎 Más de $5,000 USD</button>
+        </div>
+    </div>
+
+    <div class="card-container" id="sectionB_q5">
+        <p class="card-title" style="text-align: left;">6. Sabiendo el valor de nuestra propuesta, ¿podrías gestionar una inversión mínima de $500 USD (más IVA aplicable solo en Ecuador) para arrancar con el desarrollo de tu propia Franquicia Digital?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionBAnswer5('Sí, podría hacerlo de inmediato')">🟢 Sí, podría hacerlo de inmediato</button>
+            <button class="btn-option" onclick="handleSectionBAnswer5('No tengo el dinero completo en este momento, pero lo podría conseguir / financiar')">🟡 No tengo el dinero completo en este momento, pero lo podría conseguir / financiar</button>
+            <button class="btn-option" onclick="handleSectionBAnswer5('No, definitivamente no podría hacerlo')">🔴 No, definitivamente no podría hacerlo</button>
+        </div>
+    </div>
+
+
+    <div class="card-container" id="sectionC">
+        <div class="section-welcome-text-c">
+            ¡Excelente elección y bienvenido/a! Priorizar tu bienestar y buscar solutions de alta calidad es la mejor decisión. Nuestro catálogo está diseñado para entregarte resultados reales desde el primer día. A continuación, te abrimos las puertas a nuestra tienda digital para que descubras la variedad de opciones disponibles y elijas el producto que se adapte perfectamente a tu necesidad actual. ¡Explóralo aquí mismo!:
+        </div>
+        
+        <p class="card-title" style="text-align: left;">1. ¡Excelente elección! Nuestro catálogo está diseñado para darte resultados reales. ¿En qué línea de productos específicos te gustaría enfocarte hoy?</p>
+        <div class="btn-group-options">
+            <button class="btn-option" onclick="handleSectionCAnswer1('Tecnología Vitera Biohacking')">🧬 <b>Tecnología Vitera Biohacking:</b> Innovación avanzada y conceptos de vanguardia para optimizar tu salud.</button>
+            <button class="btn-option" onclick="handleSectionCAnswer1('Energía Cuántica')">🔮 <b>Energía Cuántica:</b> Parches Quantum diseñados para trabajar directamente con tecnología de energía cuántica.</button>
+            <button class="btn-option" onclick="handleSectionCAnswer1('Línea Automotriz')">🚗 <b>Línea Automotriz:</b> Pastillas MPG-Caps de alta eficiencia para el ahorro óptimo de combustible.</button>
+            <button class="btn-option" onclick="handleSectionCAnswer1('Club de Viajes y Vacaciones')">✈️ <b>Club de Viajes y Vacaciones:</b> BBDream Vacations, la plataforma exclusiva para diseñar tus próximas vacaciones soñadas.</button>
+            <button class="btn-option" onclick="handleSectionCAnswer1('Todas las líneas disponibles')">💡 Quiero conocer todas las líneas disponibles</button>
+        </div>
+    </div>
+
+
+    <div class="card-container" id="contactSection">
+        <h2 class="card-title" style="margin-bottom: 10px;">📋 INFORMACIÓN PERSONAL PARA CONTACTO INMEDIATO</h2>
+        <p style="color: #666; font-size: 0.95rem; margin-bottom: 25px;">Por favor, completa tus datos correctamente para ponernos en contacto y darte prioridad en la asesoría.</p>
+        
+        <div class="form-group">
+            <label for="fullName">Nombres y Apellidos Completos*</label>
+            <input type="text" id="fullName" class="input-text-field" placeholder="Ej. Juan Pérez">
+        </div>
+        
+        <div class="form-group">
+            <label for="whatsapp">Número de WhatsApp (con código de país)*</label>
+            <input type="tel" id="whatsapp" class="input-text-field" placeholder="Ej. +593 999 999 999">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Correo Electrónico*</label>
+            <input type="email" id="email" class="input-text-field" placeholder="Ej. juan.perez@email.com">
+        </div>
+
+        <button class="btn-submit-form" id="submitBtn" onclick="submitFinalContactData()">CONTÁCTANOS</button>
+    </div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz0Vtz0WFM46KdRQKCx0-rGB1G40abhuSOETi2cuUwiANf0baEetOn5mfuDnS_jUDJaGA/exec";
+
+        const video = document.getElementById('myVideo');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const introOverlay = document.getElementById('introOverlay');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        
+        // Elementos Sección A
+        const sectionA = document.getElementById('sectionA');
+        const sectionA_q2 = document.getElementById('sectionA_q2');
+        const sectionA_q3 = document.getElementById('sectionA_q3');
+        const sectionA_q4 = document.getElementById('sectionA_q4');
+        const sectionA_q5 = document.getElementById('sectionA_q5');
+        
+        // Elementos Sección B
+        const sectionB = document.getElementById('sectionB');
+        const sectionB_q2_new = document.getElementById('sectionB_q2_new');
+        const sectionB_q2 = document.getElementById('sectionB_q2');
+        const sectionB_q3 = document.getElementById('sectionB_q3');
+        const sectionB_q4 = document.getElementById('sectionB_q4');
+        const sectionB_q5 = document.getElementById('sectionB_q5');
+        
+        // Elementos Sección C y Contacto
+        const sectionC = document.getElementById('sectionC');
+        const contactSection = document.getElementById('contactSection');
+
+        let userPath = "";
+        let respuestasHistorial = [];
+        
+        // Control de secuencia de videos
+        let currentVideoIndex = 1; 
+        const secondVideoUrl = "https://videotourl.com/videos/1783955701601-73169369-596f-4c0c-b8a6-d380e48d2922.mp4";
+
+        // Función que inicia el video con audio tras la interacción requerida por el navegador
+        function startPresentation() {
+            introOverlay.style.display = 'none';
+            video.play().catch(error => {
+                console.log("Error al reproducir el video:", error);
+            });
         }
 
-        // Función encargada de ejecutar el cambio cada minuto
-        function rotarMosaico() {
-            for (let i = 1; i <= 47; i++) {
-                if (carruselFotos[i] && carruselFotos[i].length > 1) {
-                    const celdaA = document.getElementById(`cell-${i}`);
-                    if (!celdaA) continue;
+        // Se eliminó la función de alternar pausa/reproducción al hacer clic en el video.
 
-                    const imagenHtml = celdaA.querySelector('img');
-                    
-                    fotoActualIndex[i] = (fotoActualIndex[i] + 1) % carruselFotos[i].length;
-                    const proximaRuta = carruselFotos[i][fotoActualIndex[i]];
+        // Manejo del evento de finalización del video
+        video.addEventListener('ended', function() {
+            if (currentVideoIndex === 1) {
+                currentVideoIndex = 2;
+                video.src = secondVideoUrl;
+                video.load();
+                video.play().catch(error => {
+                    console.log("La reproducción automática falló:", error);
+                });
+            } else if (currentVideoIndex === 2) {
+                videoWrapper.style.display = 'none';
+                step1.style.display = 'block';
+            }
+        });
 
-                    // Efecto de desvanecimiento suave (Crossfade)
-                    imagenHtml.classList.add('fade-out');
-                    setTimeout(() => {
-                        imagenHtml.src = proximaRuta;
-                        imagenHtml.classList.remove('fade-out');
-                    }, 400); 
-                }
+        function handleFirstAnswer(answer) {
+            if (answer === 'Sí') {
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+            } else {
+                alert('Gracias por tu tiempo. ¡Mucho éxito!');
             }
         }
 
-        // 60000ms = 1 Minuto
-        setInterval(rotarMosaico, 60000);
+        function navigateToSection(sectionId) {
+            step2.style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+            if(sectionId === 'sectionA') userPath = "Sección A";
+            if(sectionId === 'sectionB') userPath = "Sección B";
+            if(sectionId === 'sectionC') userPath = "Sección C";
+        }
+
+        // ==================== FLUJO SECCIÓN A ====================
+        function handleSectionAAnswer1(option) {
+            respuestasHistorial.push("P1: " + option);
+            sectionA.style.display = 'none';
+            sectionA_q2.style.display = 'block';
+        }
+        function submitOtherAnswerA1() {
+            const val = document.getElementById('inputOtherA1').value.trim();
+            if (!val) return alert('Por favor, escribe tu respuesta.');
+            handleSectionAAnswer1(val);
+        }
+        function handleSectionAAnswer2(option) {
+            respuestasHistorial.push("P2: " + option);
+            sectionA_q2.style.display = 'none';
+            sectionA_q3.style.display = 'block';
+        }
+        function submitOtherAnswerA2() {
+            const val = document.getElementById('inputOtherA2').value.trim();
+            if (!val) return alert('Por favor, escribe tu impedimento.');
+            handleSectionAAnswer2(val);
+        }
+        function handleSectionAAnswer3(option) {
+            respuestasHistorial.push("P3: " + option);
+            sectionA_q3.style.display = 'none';
+            sectionA_q4.style.display = 'block';
+        }
+        function handleSectionAAnswer4(option) {
+            respuestasHistorial.push("P4: " + option);
+            sectionA_q4.style.display = 'none';
+            sectionA_q5.style.display = 'block';
+        }
+        function handleSectionAAnswer5(option) {
+            respuestasHistorial.push("P5: " + option);
+            sectionA_q5.style.display = 'none';
+            contactSection.style.display = 'block';
+        }
+
+        // ==================== FLUJO SECCIÓN B ====================
+        function handleSectionBAnswer1(option) {
+            respuestasHistorial.push("P1: " + option);
+            sectionB.style.display = 'none';
+            sectionB_q2_new.style.display = 'block'; 
+        }
+        function submitOtherAnswerB1() {
+            const val = document.getElementById('inputOtherB1').value.trim();
+            if (!val) return alert('Por favor, escribe tu duda.');
+            handleSectionBAnswer1(val);
+        }
+
+        function handleSectionBNewQuestion(option) {
+            respuestasHistorial.push("P2: " + option);
+            sectionB_q2_new.style.display = 'none';
+            sectionB_q2.style.display = 'block'; 
+        }
+        function submitOtherAnswerB2New() {
+            const val = document.getElementById('inputOtherB2_New').value.trim();
+            if (!val) return alert('Por favor, especifica tu motivación.');
+            handleSectionBNewQuestion(val);
+        }
+
+        function handleSectionBAnswer2(option) {
+            respuestasHistorial.push("P3: " + option);
+            sectionB_q2.style.display = 'none';
+            sectionB_q3.style.display = 'block';
+        }
+        function submitOtherAnswerB2() {
+            const val = document.getElementById('inputOtherB2').value.trim();
+            if (!val) return alert('Por favor, escribe tu respuesta.');
+            handleSectionBAnswer2(val);
+        }
+        function handleSectionBAnswer3(option) {
+            respuestasHistorial.push("P4: " + option);
+            sectionB_q3.style.display = 'none';
+            sectionB_q4.style.display = 'block';
+        }
+        function handleSectionBAnswer4(option) {
+            respuestasHistorial.push("P5: " + option);
+            sectionB_q4.style.display = 'none';
+            sectionB_q5.style.display = 'block';
+        }
+        function handleSectionBAnswer5(option) {
+            respuestasHistorial.push("P6: " + option);
+            sectionB_q5.style.display = 'none';
+            contactSection.style.display = 'block';
+        }
+
+        // ==================== FLUJO SECCIÓN C ====================
+        function handleSectionCAnswer1(option) {
+            respuestasHistorial.push("Línea elegida: " + option);
+            userPath = "Sección C"; 
+            sectionC.style.display = 'none';
+            contactSection.style.display = 'block';
+        }
+
+        // Envío final
+        function submitFinalContactData() {
+            const name = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('whatsapp').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!name || !phone || !email) {
+                alert('Por favor, completa todos los campos requeridos (*).');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "ENVIANDO INFORMACIÓN...";
+
+            const payload = {
+                name: name,
+                phone: phone,
+                email: email,
+                procedencia: userPath,
+                respuestas_detalladas: respuestasHistorial.join(" | ")
+            };
+
+            const queryParams = new URLSearchParams();
+            queryParams.append("contents", JSON.stringify(payload));
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors", 
+                body: queryParams
+            })
+            .then(() => {
+                alert('¡Muchas gracias ' + name + '! Tus datos han sido registrados con éxito en nuestro sistema.');
+                document.getElementById('fullName').value = "";
+                document.getElementById('whatsapp').value = "";
+                document.getElementById('email').value = "";
+                submitBtn.disabled = false;
+                submitBtn.innerText = "CONTÁCTANOS";
+            })
+            .catch(error => {
+                console.error("Error detectado en envío:", error);
+                alert("Hubo un percance al procesar tus datos. Por favor, inténtalo de nuevo.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "CONTÁCTANOS";
+            });
+        }
     </script>
 </body>
 </html>
