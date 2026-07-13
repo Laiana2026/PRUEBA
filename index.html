@@ -23,6 +23,37 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+        
+        /* Pantalla de inicio para forzar la activación de audio */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .btn-start-presentation {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+            transition: all 0.2s ease;
+        }
+        .btn-start-presentation:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+
         .video-container {
             max-width: 800px;
             width: 90%;
@@ -30,6 +61,7 @@
             border-radius: 8px;
             overflow: hidden;
             background-color: #000;
+            cursor: default; /* Se cambió a default ya que no es clickeable */
         }
         video {
             width: 100%;
@@ -219,10 +251,15 @@
 </head>
 <body>
 
+    <!-- Capa intermedia obligatoria para interactuar y saltarse el bloqueo de audio del navegador -->
+    <div class="intro-overlay" id="introOverlay">
+        <button class="btn-start-presentation" onclick="startPresentation()">▶ "No tengas miedo de renunciar a lo bueno para ir a por lo grandioso."</button>
+    </div>
+
     <h1 class="title-heading">DESCUBRE COMO OBTENER TU PROPIA FRANQUICIA DIGITAL</h1>
 
     <div class="video-container" id="videoWrapper">
-        <video id="myVideo" controls autoplay muted>
+        <video id="myVideo">
             <source id="videoSource" src="https://videotourl.com/videos/1783970564042-05419a06-d848-4a4f-9289-903e80d8bec1.mp4" type="video/mp4">
             Tu navegador no soporta la reproducción de video de HTML5.
         </video>
@@ -321,7 +358,7 @@
             ¡Excelente decisión y felicidades por tu iniciativa! Tener dudas es la señal clara de que estás analizando este proyecto con la seriedad que se merece. En los negocios inteligentes, las preguntas correctas traen las mejores respuestas. Las siguientes preguntas están diseñadas específicamente para identificar tus inquietudes y asegurarnos de aclararlas con total transparencia en nuestro próximo paso:
         </div>
         
-        <p class="card-title" style="text-align: left;">1. Para poder ayudarte mejor en nuestra próxima reunión, ¿cuál es tu principal duda o inquietud en este momento?</p>
+        <p class="card-title" style="text-align: left;">1. Para poder ayudarte mejor en nuestra próxima reunión, ¿cuál es tu principal duda o inquietun en este momento?</p>
         <div class="btn-group-options">
             <button class="btn-option" onclick="handleSectionBAnswer1('No estoy seguro de tener el tiempo suficiente para desarrollar el proyecto.')"><b>A)</b> No estoy seguro de tener el tiempo suficiente para desarrollar el proyecto.</button>
             <button class="btn-option" onclick="handleSectionBAnswer1('Tengo dudas sobre cómo funciona el sistema de comisiones y ganancias.')"><b>B)</b> Tengo dudas sobre cómo funciona el sistema de comisiones y ganancias.</button>
@@ -401,7 +438,7 @@
 
     <div class="card-container" id="sectionC">
         <div class="section-welcome-text-c">
-            ¡Excelente elección y bienvenido/a! Priorizar tu bienestar y buscar soluciones de alta calidad es la mejor decisión. Nuestro catálogo está diseñado para entregarte resultados reales desde el primer día. A continuación, te abrimos las puertas a nuestra tienda digital para que descubras la variedad de opciones disponibles y elijas el producto que se adapte perfectamente a tu necesidad actual. ¡Explóralo aquí mismo!:
+            ¡Excelente elección y bienvenido/a! Priorizar tu bienestar y buscar solutions de alta calidad es la mejor decisión. Nuestro catálogo está diseñado para entregarte resultados reales desde el primer día. A continuación, te abrimos las puertas a nuestra tienda digital para que descubras la variedad de opciones disponibles y elijas el producto que se adapte perfectamente a tu necesidad actual. ¡Explóralo aquí mismo!:
         </div>
         
         <p class="card-title" style="text-align: left;">1. ¡Excelente elección! Nuestro catálogo está diseñado para darte resultados reales. ¿En qué línea de productos específicos te gustaría enfocarte hoy?</p>
@@ -442,6 +479,7 @@
 
         const video = document.getElementById('myVideo');
         const videoWrapper = document.getElementById('videoWrapper');
+        const introOverlay = document.getElementById('introOverlay');
         const step1 = document.getElementById('step1');
         const step2 = document.getElementById('step2');
         
@@ -470,6 +508,16 @@
         // Control de secuencia de videos
         let currentVideoIndex = 1; 
         const secondVideoUrl = "https://videotourl.com/videos/1783955701601-73169369-596f-4c0c-b8a6-d380e48d2922.mp4";
+
+        // Función que inicia el video con audio tras la interacción requerida por el navegador
+        function startPresentation() {
+            introOverlay.style.display = 'none';
+            video.play().catch(error => {
+                console.log("Error al reproducir el video:", error);
+            });
+        }
+
+        // Se eliminó la función de alternar pausa/reproducción al hacer clic en el video.
 
         // Manejo del evento de finalización del video
         video.addEventListener('ended', function() {
@@ -544,7 +592,7 @@
         function handleSectionBAnswer1(option) {
             respuestasHistorial.push("P1: " + option);
             sectionB.style.display = 'none';
-            sectionB_q2_new.style.display = 'block'; // Pasa a la nueva pregunta 2
+            sectionB_q2_new.style.display = 'block'; 
         }
         function submitOtherAnswerB1() {
             const val = document.getElementById('inputOtherB1').value.trim();
@@ -552,11 +600,10 @@
             handleSectionBAnswer1(val);
         }
 
-        // Nueva Pregunta 2 de la Sección B (Motivación)
         function handleSectionBNewQuestion(option) {
             respuestasHistorial.push("P2: " + option);
             sectionB_q2_new.style.display = 'none';
-            sectionB_q2.style.display = 'block'; // Pasa a la pregunta de Impedimentos
+            sectionB_q2.style.display = 'block'; 
         }
         function submitOtherAnswerB2New() {
             const val = document.getElementById('inputOtherB2_New').value.trim();
